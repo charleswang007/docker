@@ -9,6 +9,8 @@ $ sudo apt-get install curl   // install curl
 $ curl -fsSL https://get.docker.com/ | sh   // install docker
 $ docker -v   // verify docker installed
 $ docker run hello-world   // should display "Hello from Docker"
+$ docker run ubuntu:14.04 /bin/echo 'Hello world'   // disable interactive mode
+$ sudo docker run -d ubuntu:14.04 /bin/sh -c "while true; do echo hello world; sleep 1; done"   // daemonized execution
 ```
 ![](https://denibertovic.com/talks/supercharge-development-env-using-docker/img/docker-flow.png)
 
@@ -58,3 +60,10 @@ $ docker push username/postgresql
 
 ![](https://philipzheng.gitbooks.io/docker_practice/_images/virtualization.png)
 ![](https://philipzheng.gitbooks.io/docker_practice/_images/docker.png)
+
+Image Source: https://philipzheng.gitbooks.io/docker_practice
+
+
+### Run OPENSUSE container
+
+![](docker_opensuse.PNG)
