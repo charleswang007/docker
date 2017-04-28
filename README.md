@@ -1,6 +1,7 @@
 # Docker
 
-### Commands (Ubuntu 14.04)
+### Hello World (Ubuntu 14.04)
+(ref: https://blog.hellosanta.com.tw/%E7%B6%B2%E7%AB%99%E8%A8%AD%E8%A8%88/%E4%BC%BA%E6%9C%8D%E5%99%A8/%E6%95%99%E4%BD%A0%E4%B8%80%E6%AC%A1%E5%AD%B8%E6%9C%83%E5%AE%89%E8%A3%9D-docker-%E9%96%8B%E5%A7%8B%E7%8E%A9%E8%BD%89-container%C2%A0%E5%AE%B9%E5%99%A8%E4%B8%96%E7%95%8C)
 
 ```sh
 $ uanme -r   // check to see if kernel version is > 3.10
@@ -14,6 +15,7 @@ $ docker run hello-world   // should display "Hello from Docker"
 Image Source: https://denibertovic.com/talks/supercharge-development-env-using-docker
 
 ### Docker CLI Example
+(ref: https://denibertovic.com/talks/supercharge-development-env-using-docker)
 
 ```sh
 $ docker login
@@ -47,4 +49,8 @@ ADD postgresql.conf /etc/postgresql/9.3/main/postgresql.conf
 
 CMD /usr/local/bin/start_postgres.sh
 ```
+```sh
 $ docker build -t postgres .
+$ docker commit <CID> username/postgresql
+$ docker push username/postgresql
+```
