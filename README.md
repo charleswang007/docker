@@ -54,3 +54,7 @@ $ docker build -t postgres .
 $ docker commit <CID> username/postgresql
 $ docker push username/postgresql
 ```
+### Docker VS. Virtual Machines
+
+![](https://philipzheng.gitbooks.io/docker_practice/_images/virtualization.png)
+![](https://philipzheng.gitbooks.io/docker_practice/_images/docker.png)
