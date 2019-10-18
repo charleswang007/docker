@@ -71,7 +71,7 @@ Image Source: https://philipzheng.gitbooks.io/docker_practice
 
 ### Docker 是什麼
 
-Docker 是個輕量級的虛擬化技術，底層使用 cgroup、chroot、namespace 實作，可以把你的應用程式連同環境一起打包，部屬的時候就不用再擔心環境的問題
+Docker 是個輕量級的虛擬化技術，底層使用 cgroup、chroot、namespace 實作，可以把你的應用程式連同環境一起打包，部屬的時候就不用再擔心環境的問題。
 
 ### Docker Image 層層疊加
 
@@ -87,6 +87,46 @@ Docker 是個輕量級的虛擬化技術，底層使用 cgroup、chroot、namesp
 
 Dockerfile 完成後就可以開始 build image，在專案目錄下跑 docker build -t simple-express-server 就會根據 Dockerfile build 出你的 image
 
-有了 image 後可以 docker run -p 3000:8080 simple-express-server 把 image 跑起來，在 container 內跑的就是剛剛設定的預設指令 node index.js，-p 3000:8080 則是把 container 內的 8080 port 跟外部的 3000 port 接通，如此一來只要用瀏覽器到 127.0.0.1:3000 就可以看到 Hello World!，這樣就完成 dockerize 了
+有了 image 後可以 docker run -p 3000:8080 simple-express-server 把 image 跑起來，在 container 內跑的就是剛剛設定的預設指令 node index.js，-p 3000:8080 則是把 container 內的 8080 port 跟外部的 3000 port 接通，如此一來只要用瀏覽器到 127.0.0.1:3000 就可以看到 Hello World!，這樣就完成 dockerize 了。
 
-如果照上面跑 docker run -p 3000:8080 <image> 的話會把終端機卡住，所以部屬的時候都會跑在背景，要跑在背景只要加一個 -d 就可以了，變成 docker run -d <image>，下指令後會得到一個 container ID，要看 log 的話可以跑 docker logs <container ID>
+如果照上面跑 docker run -p 3000:8080 <image> 的話會把終端機卡住，所以部屬的時候都會跑在背景，要跑在背景只要加一個 -d 就可以了，變成 docker run -d <image>，下指令後會得到一個 container ID，要看 log 的話可以跑 docker logs <container ID>。
+    
+### Docker Volume
+
+![](docker_volume.png)
+
+你使用 volume 時，docker 會在你的本機上隨機新增一個資料夾（Local storage area），大部分會在 /var 底下，然後讓這個資料夾跟 container 裡面的某個資料夾互通。因為他們是互通的，所以當你 container 裡面那個資料夾有任何變更時，本地的資料夾也會跟著變，而且很重要的一點是：container 被刪掉時那個資料夾還會原封不動保留在那邊，我們就可以利用這個特性保留容器裡面的資料。
+
+在啟動時加一個 -v 參數，就可以指定 volume 要跟容器內哪一個資料夾連通，這邊用的是 /db/data，實際上使用時可以換成資料庫存放資料的路徑。
+
+Demo 一下：
+
+1. 剛開始先確認 /db/data 裡面什麼檔案都沒有
+
+2. 接著在容器內新增一個檔案
+
+3. 最後再確認檔案在不在
+
+```
+docker volume create --name db-data
+docker volume ls
+docker run -v db-data:/db/data -it ubuntu ls -l /db/data
+docker run -v db-data:/db/data -it ubuntu touch /db/data/file
+docker run -v db-data:/db/data -it ubuntu ls -l /db/data
+```
+
+上面那種先 create 再使用的 volume 稱作 named volume，而現在要介紹另外一種叫做 host volume，用來直接指定某個資料夾跟容器內的資料夾連通。
+
+來一段 demo：
+
+1. 檢查 ~/app 內沒有 package.json
+
+2. 指定本機的 ~/app 跟容器內的 /app</code> 連通，接著在容器內跑 yarn init
+
+3. 跑完再回本機確認有沒有生出 package.json
+
+```
+ls app
+docker run -v ~/app:/app --workdir /app node yarn init -y
+ls app
+```
