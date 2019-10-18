@@ -75,15 +75,15 @@ Docker 是個輕量級的虛擬化技術，底層使用 cgroup、chroot、namesp
 
 ### Docker Image 層層疊加
 
-![](docker_image.PNG)
+![](docker_image.png)
 
 ### Docker Example
 
 一個簡單的 simple-express-server，他會啟動一個 server 監聽 8080 port，到 127.0.0.1:8080 就可以看到 Hello World!
 
-![](docker_example.PNG)
+![](docker_example.png)
 
-![](docker_file.PNG)
+![](docker_file.png)
 
 Dockerfile 完成後就可以開始 build image，在專案目錄下跑 docker build -t simple-express-server 就會根據 Dockerfile build 出你的 image
 
