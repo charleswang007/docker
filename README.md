@@ -31,6 +31,8 @@ $ docker logs 2344d8a4e916
 $ docker stop 2344d8a4e916
 $ docker kill 2344d8a4e916
 $ docker start 2344d8a4e916
+$ docker pull ubuntu
+$ docker run -it ubuntu bash
 ```
 ![](docker_ps.PNG)
 
@@ -66,3 +68,25 @@ Image Source: https://philipzheng.gitbooks.io/docker_practice
 ### Run OPENSUSE container
 
 ![](docker_opensuse.PNG)
+
+### Docker 是什麼
+
+Docker 是個輕量級的虛擬化技術，底層使用 cgroup、chroot、namespace 實作，可以把你的應用程式連同環境一起打包，部屬的時候就不用再擔心環境的問題
+
+### Docker Image 層層疊加
+
+![](docker_image.PNG)
+
+### Docker Example
+
+一個簡單的 simple-express-server，他會啟動一個 server 監聽 8080 port，到 127.0.0.1:8080 就可以看到 Hello World!
+
+![](docker_example.PNG)
+
+![](docker_file.PNG)
+
+Dockerfile 完成後就可以開始 build image，在專案目錄下跑 docker build -t simple-express-server 就會根據 Dockerfile build 出你的 image
+
+有了 image 後可以 docker run -p 3000:8080 simple-express-server 把 image 跑起來，在 container 內跑的就是剛剛設定的預設指令 node index.js，-p 3000:8080 則是把 container 內的 8080 port 跟外部的 3000 port 接通，如此一來只要用瀏覽器到 127.0.0.1:3000 就可以看到 Hello World!，這樣就完成 dockerize 了
+
+如果照上面跑 docker run -p 3000:8080 <image> 的話會把終端機卡住，所以部屬的時候都會跑在背景，要跑在背景只要加一個 -d 就可以了，變成 docker run -d <image>，下指令後會得到一個 container ID，要看 log 的話可以跑 docker logs <container ID>
