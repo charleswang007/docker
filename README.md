@@ -91,7 +91,7 @@ Dockerfile 完成後就可以開始 build image，在專案目錄下跑 docker b
 
 如果照上面跑 docker run -p 3000:8080 <image> 的話會把終端機卡住，所以部屬的時候都會跑在背景，要跑在背景只要加一個 -d 就可以了，變成 docker run -d <image>，下指令後會得到一個 container ID，要看 log 的話可以跑 docker logs <container ID>。
     
-### Docker Volume
+### Docker Volume - 1
 
 ![](docker_volume.png)
 
@@ -129,4 +129,51 @@ docker run -v db-data:/db/data -it ubuntu ls -l /db/data
 ls app
 docker run -v ~/app:/app --workdir /app node yarn init -y
 ls app
+```
+
+### Docker Volume - 2
+
+撰寫一個 Dockerfile 使用 VOLUME 指令，把 Docker的Image Build起來，然後啟動 Docker Container，把資料寫進在 Docker Container裡面，最後使用 docker inspect 指令，找到 Mapping 到實體主機的資料夾路徑，確認是否有看到之前寫在 Container 裡面的檔案。
+
+Dockerfile 如下
+
+```
+FROM centos
+VOLUME ["/storage"]
+```
+
+Build Image 指令如下
+
+```
+$ docker build -t volumetest .
+```
+
+啟動 Docker Container 指令如下
+
+```
+$ docker run -it volumetest /bin/bash
+```
+
+在實體主機上使用 docker inspect 指令，找到 Volume 在實體主機的資料夾路徑
+
+```
+docker inspect -f '{{.Mounts}}' e2987aaab700 
+```
+
+e2987aaab700 為 ContainerID，也可以使用指定 Container Name 的方式
+
+### Docker Volume - 3
+
+如何讓 Container 和 Container 之間的資料共享，可以使用以下的方式
+
+啟動第一個 Container 指令如下
+
+```
+$ docker run -it -v /data --name=container1 centos /bin/bash
+```
+
+啟動第二個 Container 指令如下
+
+```
+$ docker run -it --volumes-from container1 --name=container2 centos /bin/bash
 ```
